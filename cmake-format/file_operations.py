@@ -2,11 +2,12 @@ import os
 import fnmatch
 
 
-def list_files(files, recursive=False, exclude=None):
+def list_files(files, exclude=None):
     cmake_files = []
     if exclude is None:
         exclude = []
 
+    exclude.append("build")
     for root, dirs, files in os.walk(files):
         dirs[:] = [
             d

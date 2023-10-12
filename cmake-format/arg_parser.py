@@ -10,17 +10,7 @@ def parse_cmake_format_args():
         "--in-place", action="store_true", help="Modify input file(s) in place"
     )
     parser.add_argument(
-        "--recursive",
-        action="store_true",
-        help="Recursively process files in directories",
-    )
-    parser.add_argument(
         "--check", action="store_true", help="Check formatting without making changes"
-    )
-    parser.add_argument(
-        "--inconclusive",
-        action="store_true",
-        help="Display inconclusive formatting rules",
     )
     parser.add_argument(
         "--line-width",
@@ -28,6 +18,21 @@ def parse_cmake_format_args():
         metavar="WIDTH",
         help="Set maximum line width for formatting",
     )
+    parser.add_argument(
+        "-e",
+        "--exclude",
+        metavar="PATTERN",
+        default=[],
+    )
+
+    # parser.add_argument(
+    #     "-e",
+    #     "--exclude",
+    #     nargs="+",
+    #     default=[],
+    #     help="exclude paths matching the given glob-like pattern(s)"
+    #     " from recursive search",
+    # )
     parser.add_argument(
         "--tab-size",
         type=int,
@@ -49,7 +54,6 @@ def parse_cmake_format_args():
         choices=["auto", "always", "never"],
         help="show colored diff (default: auto)",
     )
-
     parser.add_argument(
         "-q",
         "--quiet",
@@ -65,13 +69,15 @@ def parse_cmake_format_args():
     )
 
     parser.add_argument(
-        "--style", help="Formatting style to use (default: file)", default="file"
+        "--config",
+        help="Formatting style to use (default: file)",
     )
 
     parser.add_argument(
         "-i",
         "--inplace",
-        type=lambda x: bool(strtobool(x)),
+        action="store_true",
+        # type=lambda x: bool(strtobool(x)),
         default=False,
         help="Just fix files (`clang-format -i`) instead of returning a diff",
     )
@@ -80,3 +86,15 @@ def parse_cmake_format_args():
 
     args = parser.parse_args()
     return args
+
+
+def split_list_arg(arg):
+    """
+    If arg is a list containing a single argument it is split into multiple elements.
+    Otherwise it is returned unchanged
+    Workaround for GHA not allowing list arguments
+    """
+    if not arg:
+        return None
+    split_args = arg.split(",")
+    return split_args
