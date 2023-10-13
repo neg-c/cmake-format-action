@@ -1,5 +1,5 @@
 #!/bin/sh -l
 
-cd "$GITHUB_WORKSPACE" || exit
+cd "$GITHUB_WORKSPACE"
 
-/cmake_format_runner.py $@
+python3 cmake-format/main.py
