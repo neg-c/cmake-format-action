@@ -3,7 +3,6 @@ import fnmatch
 
 
 def list_files(files, exclude=None):
-    print(files)
     cmake_files = []
     if exclude is None:
         exclude = []
