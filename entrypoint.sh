@@ -2,4 +2,6 @@
 
 cd "$GITHUB_WORKSPACE"
 
-python3 cmake-format/main.py
+ls -la
+
+# python3 cmake-format/main.py
