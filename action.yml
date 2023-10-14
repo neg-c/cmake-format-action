@@ -30,5 +30,6 @@ runs:
     - ${{ inputs.inplace }}
     - --config
     - ${{ inputs.config }}
+    - --exclude
     - ${{ inputs.exclude }}
     - ${{ inputs.source }}

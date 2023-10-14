@@ -75,7 +75,11 @@ def parse_cmake_format_args():
         help="Just fix files (`clang-format -i`) instead of returning a diff",
     )
 
-    parser.add_argument("files", metavar="file", nargs="+")
+    parser.add_argument(
+        "files",
+        type=lambda x: [path for line in x.split("\n") for path in line.split()],
+        metavar="file",
+    )
 
     args = parser.parse_args()
     return args
