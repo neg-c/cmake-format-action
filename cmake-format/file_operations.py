@@ -4,12 +4,15 @@ import fnmatch
 
 def list_files(files, exclude=None):
     cmake_files = []
+
     if exclude is None:
         exclude = []
 
     exclude.append("build")
+
     for file in files:
         for root, dirs, files in os.walk(file):
+            # Filter out directories and files based on the exclusion patterns
             dirs[:] = [
                 d
                 for d in dirs

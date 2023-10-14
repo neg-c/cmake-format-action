@@ -22,7 +22,7 @@ def parse_cmake_format_args():
     parser.add_argument(
         "-e",
         "--exclude",
-        metavar="PATTERN",
+        type=lambda x: [pattern for line in x.split("\n") for pattern in line.split()],
         default=[],
     )
     parser.add_argument(
@@ -83,15 +83,3 @@ def parse_cmake_format_args():
 
     args = parser.parse_args()
     return args
-
-
-def split_list_arg(arg):
-    """
-    If arg is a list containing a single argument it is split into multiple elements.
-    Otherwise it is returned unchanged
-    Workaround for GHA not allowing list arguments
-    """
-    if not arg:
-        return None
-    split_args = arg.split(",")
-    return split_args
