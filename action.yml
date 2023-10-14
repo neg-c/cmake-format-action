@@ -26,12 +26,4 @@ runs:
   using: "docker"
   image: "Dockerfile"
   args:
-    - --color
-    - always
-    - --config
-    - ${{ inputs.config }}
-    - --inplace
-    - ${{ inputs.inplace }}
-    - --exclude
-    - ${{ inputs.exclude }}
     - ${{ inputs.source }}
