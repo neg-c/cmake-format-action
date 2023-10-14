@@ -2,4 +2,4 @@
 
 cd "$GITHUB_WORKSPACE"
 
-python3 cmake-format/main.py
+python3 /cmake-format/main.py "$@"

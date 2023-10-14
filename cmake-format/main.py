@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from arg_parser import parse_cmake_format_args, split_list_arg
+from arg_parser import parse_cmake_format_args
 from file_operations import list_files
 from cmake_format import run_cmake_format_diff_wrapper, ExitStatus, print_diff
 from output import print_trouble
@@ -31,9 +31,8 @@ def main():
 
     retcode = ExitStatus.SUCCESS
 
-    excludes = split_list_arg(args.exclude)
 
-    files = list_files(args.files, exclude=excludes)
+    files = list_files(args.files, exclude=args.exclude)
 
     if not files:
         print_trouble("No files found", use_colors=colored_stderr)

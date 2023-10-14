@@ -7,31 +7,29 @@ branding:
   color: "orange"
 inputs:
   source:
-    description: "Source folder to check formatting or directoryPath"
+    description: "Source file/folder to check formatting or directoryPath"
     required: false
     default: "."
   exclude:
-    description: "Folder to exclude from formatting check"
+    description: "Folders to exclude from formatting check"
     required: false
     default: "none"
   config:
-    description: "Formatting style to use"
+    description: "Use .cmake-format style"
     required: false
-    default: ".cmake-format"
+    default: False
   inplace:
     description: "Just fix files (`cmake-format -i`) instead of returning a diff"
     required: false
-    default: "False"
+    default: False
 runs:
   using: "docker"
   image: "Dockerfile"
   args:
-    - --color
-    - always
-    - --config
-    - ${{ inputs.config }}
     - --inplace
     - ${{ inputs.inplace }}
+    - --config
+    - ${{ inputs.config }}
     - --exclude
     - ${{ inputs.exclude }}
     - ${{ inputs.source }}

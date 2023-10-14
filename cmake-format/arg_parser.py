@@ -1,4 +1,5 @@
 import argparse
+from distutils.util import strtobool
 
 
 def parse_cmake_format_args():
@@ -21,18 +22,9 @@ def parse_cmake_format_args():
     parser.add_argument(
         "-e",
         "--exclude",
-        metavar="PATTERN",
+        type=lambda x: [pattern for line in x.split("\n") for pattern in line.split()],
         default=[],
     )
-
-    # parser.add_argument(
-    #     "-e",
-    #     "--exclude",
-    #     nargs="+",
-    #     default=[],
-    #     help="exclude paths matching the given glob-like pattern(s)"
-    #     " from recursive search",
-    # )
     parser.add_argument(
         "--tab-size",
         type=int,
@@ -70,31 +62,24 @@ def parse_cmake_format_args():
 
     parser.add_argument(
         "--config",
+        type=lambda x: bool(strtobool(x)),
+        default=False,
         help="Formatting style to use (default: file)",
     )
 
     parser.add_argument(
         "-i",
         "--inplace",
-        action="store_true",
-        # type=lambda x: bool(strtobool(x)),
+        type=lambda x: bool(strtobool(x)),
         default=False,
         help="Just fix files (`clang-format -i`) instead of returning a diff",
     )
 
-    parser.add_argument("files", metavar="file")
+    parser.add_argument(
+        "files",
+        type=lambda x: [path for line in x.split("\n") for path in line.split()],
+        metavar="file",
+    )
 
     args = parser.parse_args()
     return args
-
-
-def split_list_arg(arg):
-    """
-    If arg is a list containing a single argument it is split into multiple elements.
-    Otherwise it is returned unchanged
-    Workaround for GHA not allowing list arguments
-    """
-    if not arg:
-        return None
-    split_args = arg.split(",")
-    return split_args
