@@ -56,7 +56,7 @@ def run_cmake_format_diff(args, file):
 
     invocation = ["cmake-format", file]
     if args.config:
-        invocation.append("--config=" + args.config)
+        invocation.append("--config=.cmake-format")
     if args.inplace:
         invocation.append("-i")
 

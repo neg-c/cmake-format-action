@@ -1,4 +1,5 @@
 import argparse
+from distutils.util import strtobool
 
 
 def parse_cmake_format_args():
@@ -24,15 +25,6 @@ def parse_cmake_format_args():
         metavar="PATTERN",
         default=[],
     )
-
-    # parser.add_argument(
-    #     "-e",
-    #     "--exclude",
-    #     nargs="+",
-    #     default=[],
-    #     help="exclude paths matching the given glob-like pattern(s)"
-    #     " from recursive search",
-    # )
     parser.add_argument(
         "--tab-size",
         type=int,
@@ -70,19 +62,20 @@ def parse_cmake_format_args():
 
     parser.add_argument(
         "--config",
+        type=lambda x: bool(strtobool(x)),
+        default=False,
         help="Formatting style to use (default: file)",
     )
 
     parser.add_argument(
         "-i",
         "--inplace",
-        action="store_true",
-        # type=lambda x: bool(strtobool(x)),
+        type=lambda x: bool(strtobool(x)),
         default=False,
         help="Just fix files (`clang-format -i`) instead of returning a diff",
     )
 
-    parser.add_argument("files", metavar="file", nargs='+')
+    parser.add_argument("files", metavar="file", nargs="+")
 
     args = parser.parse_args()
     return args
