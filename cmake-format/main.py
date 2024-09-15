@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from arg_parser import parse_cmake_format_args
 from file_operations import list_files
-from cmake_format import run_cmake_format_diff_wrapper, ExitStatus, print_diff
+from cmake_format import run_cmake_format_diff_wrapper, ExitStatus, print_diff, DiffError
 from output import print_trouble
 from functools import partial
 import sys
