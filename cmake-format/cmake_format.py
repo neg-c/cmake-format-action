@@ -1,7 +1,7 @@
 import io
 import subprocess
 import difflib
-from output import print_diff, colorize, bold_red, print_trouble
+from output import print_diff, colorize, print_trouble
 from exceptions import DiffError, UnexpectedError
 
 class ExitStatus:
