@@ -1,56 +1,38 @@
 import io
 import subprocess
 import difflib
-from output import print_diff
-from output import colorize
-from output import bold_red
-from output import print_trouble
-from argparse import Namespace
-import multiprocessing
-
-
-class DiffError(Exception):
-    def __init__(self, message, errs=None):
-        super(DiffError, self).__init__(message)
-        self.errs = errs or []
-
-
-class UnexpectedError(Exception):
-    def __init__(self, message, exc=None):
-        super(UnexpectedError, self).__init__(message)
-        self.formatted_traceback = traceback.format_exc()
-        self.exc = exc
-
+from output import print_diff, colorize, bold_red, print_trouble
+from exceptions import DiffError, UnexpectedError
 
 class ExitStatus:
+    """Exit status code constants."""
     SUCCESS = 0
     DIFF = 1
     TROUBLE = 2
 
-
 def make_diff(file, original, reformatted):
+    """Generate a unified diff between original and reformatted content."""
     return list(
         difflib.unified_diff(
             original,
             reformatted,
-            fromfile="{}\t(original)".format(file),
-            tofile="{}\t(reformatted)".format(file),
+            fromfile=f"{file}\t(original)",
+            tofile=f"{file}\t(reformatted)",
             n=3,
         )
     )
 
-
 def run_cmake_format_diff_wrapper(args, file):
+    """Wrapper function to handle exceptions during cmake-format execution."""
     try:
-        ret = run_cmake_format_diff(args, file)
-        return ret
+        return run_cmake_format_diff(args, file)
     except DiffError:
         raise
     except Exception as e:
         raise UnexpectedError(f"{file}: {e.__class__.__name__}: {e}", e)
 
-
 def run_cmake_format_diff(args, file):
+    """Run cmake-format on a single file and return the diff."""
     with io.open(file, "r", encoding="utf-8") as f:
         original = f.read()
 
