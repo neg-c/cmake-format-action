@@ -8,6 +8,7 @@ class ColorCodes:
     RED = "\x1b[31m"
     GREEN = "\x1b[32m"
     CYAN = "\x1b[36m"
+    YELLOW = "\x1b[33m"
 
 def print_trouble(message: str, use_colors: bool = False) -> None:
     """Print an error message to stderr.
@@ -32,10 +33,19 @@ def print_diff(diff_lines: List[str], use_color: bool = False) -> None:
     if use_color:
         diff_lines = list(colorize(diff_lines))
     
+    if diff_lines:
+        header = "\nRequired formatting changes:\n" + "=" * 50 + "\n"
+        if use_color:
+            header = f"{ColorCodes.YELLOW}{header}{ColorCodes.RESET}"
+        sys.stdout.write(header)
+    
     if sys.version_info[0] < 3:
         sys.stdout.writelines((line.encode("utf-8") for line in diff_lines))
     else:
         sys.stdout.writelines(diff_lines)
+    
+    if diff_lines:
+        sys.stdout.write("\n")
 
 def colorize(diff_lines: List[str]) -> Iterator[str]:
     """Add ANSI color codes to diff lines.
@@ -54,12 +64,12 @@ def colorize(diff_lines: List[str]) -> Iterator[str]:
     """
     for line in diff_lines:
         if line.startswith(("--- ", "+++ ")):
-            yield f"{ColorCodes.BOLD}{line}{ColorCodes.RESET}"
-        elif line.startswith("@@ "):
-            yield f"{ColorCodes.CYAN}{line}{ColorCodes.RESET}"
+            yield f"{ColorCodes.YELLOW}{ColorCodes.BOLD}{line}{ColorCodes.RESET}\n"
+        elif line.startswith("@@"):
+            yield f"{ColorCodes.CYAN}{line}{ColorCodes.RESET}\n"
         elif line.startswith("+"):
-            yield f"{ColorCodes.GREEN}{line}{ColorCodes.RESET}\n"
+            yield f"{ColorCodes.GREEN}{line.rstrip()}{ColorCodes.RESET}\n"
         elif line.startswith("-"):
-            yield f"{ColorCodes.RED}{line}{ColorCodes.RESET}\n"
+            yield f"{ColorCodes.RED}{line.rstrip()}{ColorCodes.RESET}\n"
         else:
             yield f"{line}\n"
