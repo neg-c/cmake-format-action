@@ -32,4 +32,6 @@ runs:
     - ${{ inputs.config }}
     - --exclude
     - ${{ inputs.exclude }}
+    - --color
+    - always
     - ${{ inputs.source }}
